@@ -241,29 +241,7 @@ function getStaffDmg() {
 // aoe specials
 // healing specials
 // consider special charge
-// assume attacker and defender stats are objects:
-
-// const unit = {
-//     hp: 0,
-//     totalHp: 0,
-//     atk: 0,
-//     spd: 0,
-//     def: 0,
-//     res: 0,
-//     TA: 0,
-//     weapon: '',
-//     isGem: bool,
-//     isRaven: bool,
-//     isBrave: bool,
-//     isWoDao: bool,
-//     special: '',
-//     specialCharge: 0,
-//     isWrath: bool,
-//     isShieldPulse: bool,
-// }
-
-// maybe the mod stats in another object?
-
+// defensive tiles
 
 // weapon types
 // wo

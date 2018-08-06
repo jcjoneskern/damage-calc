@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './index.css';
+import './css/index.css'
 
 import Unit from './components/unit';
 import Results from './components/results';
@@ -9,6 +9,8 @@ class App extends Component {
     super(props);
 
     this.state = {
+      attacker: {},
+      defender: {},
       results: {
         atkDmg: 0,
         defDmg: 0,
@@ -21,6 +23,7 @@ class App extends Component {
     }
 
     this._getResults = this._getResults.bind(this);
+    this.updateUnitValues = this.updateUnitValues.bind(this);
   }
 
   _getResults(event) {
@@ -31,22 +34,59 @@ class App extends Component {
     })
   }
 
-  // use context to get attacker/defender damage results? or to get attacker/defender objects and calculation happens at this level?
+  updateUnitValues(e, unitType) {
+    if (e.target.value.length >= 3) {
+      return;
+    }
+
+    let newNum = Number(e.target.value);
+    
+    if (newNum > 99) {
+      newNum = 99;
+    }
+
+    let newValue = {
+      ...this.state[unitType],
+      [e.target.name]: newNum
+    }
+
+    // TODO: debounce this
+    if (e.target.name === 'totalHp') {
+      if (this.state[unitType].hp > newNum) {
+        newValue.hp = newNum
+      }
+    }
+
+    if (e.target.name === 'hp') {
+      if (this.state[unitType].totalHp < newNum) {
+        newValue.hp = this.state[unitType].totalHp
+      }
+    }
+    
+    this.setState({
+      [unitType]: newValue
+    })
+  }
 
   render() {
     return (
       <main>
-        <header>
-          <h1>Will You Survive?</h1>
-        </header>
-        <div className="App">
-          <div id="unit-container">
-            <Unit unitType="Attacker" />
-            <Unit unitType="Defender" />
+        <div className="content">
+          <header>
+            <h1>Will You Survive?</h1>
+          </header>
+          <div className="App">
+            <div id="unit-container">
+              <Unit updateUnitValues={this.updateUnitValues} unitType="attacker" unitStats={this.state.attacker} />
+              <Unit updateUnitValues={this.updateUnitValues} unitType="defender" unitStats={this.state.defender} />
+            </div>
+            <button onClick={this._getResults}>One will live, one will die</button>
+            <Results calced={this.state.calced} results={this.state.results} />
           </div>
-          <button onClick={this._getResults}>One will live, one will die</button>
-          <Results calced={this.state.calced} results={this.state.results} />
         </div>
+        <footer>
+          <a>About</a> || <a>Contact</a>
+        </footer>
       </main>
     );
   }

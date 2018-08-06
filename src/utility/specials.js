@@ -1,5 +1,12 @@
 export default [
     {
+        value: 'nospecial',
+        label: 'No Special',
+        cooldown: 0,
+        aoe: false,
+        healing: false
+    },
+    {
         value: 'aegis', 
         label: 'Aegis', 
         cooldown: 3,

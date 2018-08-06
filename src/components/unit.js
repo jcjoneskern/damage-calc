@@ -10,23 +10,15 @@ class Unit extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-
-        }
+        this.state = {}
     }
 
-
-
-    // pass these all onChange functions to update the state/unit stats
-    // state/unit stats get sent up using the context api ooooor just use redux
-    // if defender, show retaliate checkbox
-    // long term goal: marriage checkbox that adds buffs automatically
     render() {
         return (
             <section className="unit-container">
                 <h2>{this.props.unitType}</h2>
                 <div className="stats">
-                    <BaseStats />
+                    <BaseStats unitStats={this.props.unitStats} unitType={this.props.unitType} updateUnitValues={this.props.updateUnitValues} />
                     <StatModifier type="Buffs" />
                     <StatModifier type="Field Buffs" />
                     <StatModifier type="Debuffs" />

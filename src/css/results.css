@@ -1,0 +1,10 @@
+#results {
+    margin: 1rem;
+}
+
+.results-container {
+    padding: 1rem;
+    background: var(--lgray);
+    display: flex;
+    justify-content: space-around;
+}
