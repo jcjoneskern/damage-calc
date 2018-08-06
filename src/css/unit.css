@@ -1,0 +1,56 @@
+.unit-container {
+    margin: 1rem;
+    background: var(--lgray);
+}
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    padding: 1rem;
+}
+
+.stat-container {
+    flex: 1 1 50%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.ws-container {
+    display: flex;
+    padding: 1rem;
+}
+
+.ws {
+    flex: 1 1 50%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+input {
+    background:#fff;
+    margin: 0.15rem;
+    padding: 0.2rem;
+    border: 0;
+    border-bottom: 1px solid var(--slight);
+}
+
+input:focus {
+    outline: 0;
+    transition: border-bottom 300ms;
+    border-bottom: 1px solid var(--sdark);
+}
+
+h2 {
+    background: var(--secondary);
+    color: #fff;
+    border-bottom: 3px solid var(--slight);
+    margin: 0 auto;
+    padding: 0.5rem;
+}

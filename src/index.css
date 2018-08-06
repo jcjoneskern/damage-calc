@@ -1,0 +1,70 @@
+@font-face {
+  font-family: 'nintendoP';
+  src: 
+    local('nintendoP'), 
+    url(./fonts/nintendoP.ttf) format('truetype');
+}
+
+:root {
+    --primary: #ffb300;
+    --plight: #ffe54c;
+    --pdark: #c68400;
+    --secondary: #0277bd;
+    --slight: #58a5f0;
+    --sdark: #004c8c;
+    --dgray: #e1e2e1;
+    --lgray: #f5f5f6;
+}
+
+body {
+  margin: 0 auto;
+  padding: 0;
+  font-family: 'nintendoP', sans-serif;
+  text-align: center;
+  background: var(--dgray);
+}
+
+.app {
+  width: 80%;
+}
+
+header {
+  width: 100%;
+  background: var(--primary);
+  padding: 2rem 0;
+  border-bottom: 5px solid var(--pdark);
+}
+
+h1 {
+  margin: 0;
+  opacity: 0.8;
+}
+
+h2 {
+  margin: 0.5rem auto;
+}
+
+h3 {
+  margin: 0.25rem auto;
+}
+
+button {
+  border: 0;
+  font-family: 'nintendoP', sans-serif;
+  background-color: var(--secondary);
+  color: #fff;
+  padding: 0.5rem;
+  transition: background-color 200ms;
+}
+
+button:hover {
+  background: var(--slight);
+}
+
+input {
+  font-family: 'nintendoP', sans-serif;
+}
+
+#unit-container {
+  display: flex;
+}
