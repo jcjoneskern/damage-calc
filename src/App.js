@@ -24,6 +24,8 @@ class App extends Component {
 
     this._getResults = this._getResults.bind(this);
     this.updateUnitValues = this.updateUnitValues.bind(this);
+    this.updateUnitWeapon = this.updateUnitWeapon.bind(this);
+    this.updateUnitSpecial = this.updateUnitSpecial.bind(this);
   }
 
   _getResults(event) {
@@ -68,6 +70,28 @@ class App extends Component {
     })
   }
 
+  updateUnitWeapon(unitType, weapon) {
+    let newWeapon = {
+      ...this.state[unitType],
+      weapon
+    }
+
+    this.setState({
+     [unitType]: newWeapon
+    });
+  }
+
+  updateUnitSpecial(unitType, special) {
+    let newSpecial = {
+      ...this.state[unitType],
+      ...special
+    }
+
+    this.setState({
+      [unitType]: newSpecial
+    });
+  }
+
   render() {
     return (
       <main>
@@ -77,8 +101,18 @@ class App extends Component {
           </header>
           <div className="App">
             <div id="unit-container">
-              <Unit updateUnitValues={this.updateUnitValues} unitType="attacker" unitStats={this.state.attacker} />
-              <Unit updateUnitValues={this.updateUnitValues} unitType="defender" unitStats={this.state.defender} />
+              <Unit 
+                updateUnitValues={this.updateUnitValues} 
+                updateUnitWeapon={this.updateUnitWeapon}
+                updateUnitSpecial={this.updateUnitSpecial}
+                unitType="attacker" 
+                unitStats={this.state.attacker} />
+              <Unit 
+                updateUnitValues={this.updateUnitValues} 
+                updateUnitWeapon={this.updateUnitWeapon}
+                updateUnitSpecial={this.updateUnitSpecial}
+                unitType="defender" 
+                unitStats={this.state.defender} />
             </div>
             <button onClick={this._getResults}>One will live, one will die</button>
             <Results calced={this.state.calced} results={this.state.results} />

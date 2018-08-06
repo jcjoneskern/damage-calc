@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import weapons from '../utility/weapons';
+
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css'
+
+import weapons from '../utility/weapons';
+import { getFromArray } from '../utility';
 
 class Weapon extends Component {
     constructor(props) {
@@ -15,9 +18,12 @@ class Weapon extends Component {
     }
 
     _onSelect(option) {
+        const weapon = getFromArray(option.value, weapons);
+
         this.setState({
-            weapon: option
+            weapon
         })
+        this.props.updateUnitWeapon(this.props.unitType, weapon)
     }
 
     // make effectiveness bonus a checkbox

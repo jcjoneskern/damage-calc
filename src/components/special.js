@@ -25,13 +25,13 @@ class Special extends Component {
         this.setState({
             special,
             cooldown: special.cooldown
-        })
+        }, () => this.props.updateUnitSpecial(this.props.unitType, this.state));
     }
 
     _onCDChange(event) {
         this.setState({
-            cooldown: event.target.value
-        })
+            cooldown: Number(event.target.value)
+        }, () => this.props.updateUnitSpecial(this.props.unitType, this.state));
     }
 
 

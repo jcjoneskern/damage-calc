@@ -24,8 +24,12 @@ class Unit extends Component {
                     <StatModifier type="Debuffs" />
                 </div>
                 <div className="ws-container">
-                    <Weapon />
-                    <Special />
+                    <Weapon 
+                        updateUnitWeapon={this.props.updateUnitWeapon}
+                        unitType={this.props.unitType} />
+                    <Special 
+                        updateUnitSpecial={this.props.updateUnitSpecial}
+                        unitType={this.props.unitType} />
                 </div>
             </section>
 
