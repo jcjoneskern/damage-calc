@@ -1,35 +1,111 @@
-// TODO: regex or substring for dragons and tomes
-function getDmgType(weapon, dDef, dRes) {
-    if (weapon === 'tome' || weapon === 'staff') {
-        return 'res';
-    } else if (weapon === 'sword' || weapon === 'lance' || weapon === 'axe' || weapon === 'dagger' || weapon === 'bow') {
-        return 'def';
-    } else if (weapon === 'stone' && dDef > dRes) {
-        return 'res';
+export function getDmg(attacker, defender) {
+    let attackerHp = attacker.hp;
+    let defenderHp = defender.hp;
+    let attackerCd = attacker.cooldown;
+    let defenderCd = defender.cooldown;
+
+    const attackerAtk = getAtk(attacker);
+    const attackerEff = getEff(attacker.bonus);
+    const attackerAdv = getAdv(attacker, defender);
+    const attackerSpcStat = getSpcStat(attacker);
+    let attackerSpcMod = getSpcMod(attacker.special.value, attackerCd);
+    const attackerMit = getMit(attacker.weapon.dmgType, defender); // TODO: adaptive
+    const attackerMitMod = getMitMod(attacker.special.value, attacker.defTerrain);
+    const attackerOffMult = getOffMult(attacker.special.value);
+    const attackerOffFlat = getOffFlat(attacker);
+    const attackerDefMult = getDefMult(attacker, defender);
+    const attackerDefFlat = getDefFlat(attacker);
+
+    const defenderAtk = getAtk(defender);
+    const defenderEff = getEff(attacker.bonus);
+    const defenderAdv = getAdv(defender, attacker);
+    const defenderSpcStat = getSpcStat(defender);
+    let defenderSpcMod = getSpcMod(defender.special.value, defenderCd);
+    const defenderMit = getMit(defender.weapon.dmgType, attacker); // TODO: adaptive
+    const defenderMitMod = getMitMod(defender.special.value, defender.defTerrain);
+    const defenderOffMult = getOffMult(defender.special.value);
+    const defenderOffFlat = getOffFlat(defender);
+    const defenderDefMult = getDefMult(defender, attacker);
+    const defenderDefFlat = getDefFlat(defender);
+
+    if (attacker.hp > 0 && defender.hp > 0) {
+        let attackerDamage = damageCalc(attackerAtk, attackerEff, attackerAdv, attackerSpcStat, attackerSpcMod, attackerMit, attackerMitMod, attackerOffMult, attackerOffFlat, defenderDefMult, defenderDefFlat);
+
+        if (attacker.weapon.value === 'staff') {
+            attackerDamage *= 0.5;
+        }
+        // defender lived
+        if (attackerDamage < defender.hp) {
+            let defenderDamage = damageCalc(defenderAtk, defenderEff, defenderAdv, defenderSpcStat, defenderSpcMod, defenderMit, defenderMitMod, defenderOffMult, defenderOffFlat, attackerDefMult, attackerDefFlat);
+
+            if (defender.weapon.value === 'staff') {
+                attackerDamage *= 0.5;
+            }
+
+            // attacker lived
+            if (defenderDamage < attacker.hp) {
+                attackerCd -= 1;
+                defenderCd -= 1;
+
+                if (attacker.spd - defender.spd >= 5) {
+
+                // defender follows up
+                } else if (defender.spd - attacker.spd >= 5) {
+                    // change cd
+
+                // neither follows up
+                } else {
+                    return {
+                        atkDmg: attackerDamage,
+                        defDmg: defenderDamage,
+                        atkFinal: attacker.hp - defenderDamage,
+                        atkBase: attacker.totalHp,
+                        defFinal: defender.hp - attackerDamage,
+                        defBase: defender.totalHp
+                    }
+                }
+            // attacker died
+            } else {
+                return {
+                    atkDmg: attackerDamage,
+                    defDmg: defenderDamage,
+                    atkFinal: 0,
+                    atkBase: attacker.totalHp,
+                    defFinal: defender.hp - attackerDamage,
+                    defBase: defender.totalHp
+                }
+            }
+        // defender died
+        } else {
+            return {
+                atkDmg: attackerDamage,
+                defDmg: 0,
+                atkFinal: attacker.hp,
+                atkBase: attacker.totalHp,
+                defFinal: 0,
+                defBase: defender.totalHp
+            }
+        }
     } else {
-        return 'def';
+        return {
+            warning: "they're already dead!"
+        }
     }
 }
 
-// TODO: regex or substring for dragons and tomes
-function getColor(weapon) {
-    if (weapon === 'sword' || weapon === 'tome' || weapon === 'stone') {
-        return 'red';
-    } else if (weapon === 'lance' || weapon === 'tome' || weapon === 'stone') {
-        return 'blue';
-    } else if (weapon === 'axe' || weapon === 'tome' || weapon === 'stone') {
-        return 'green';
-    } else if (weapon === 'dagger' || weapon === 'bow' || weapon === 'stone' || weapon === 'staff') {
-        return 'gray';
-    }
+function damageCalc(atk, eff, adv, spcStat, spcMod, mit, mitMod, offMult, offFlat, defMult, defFlat) {
+    return Math.ceil((Math.floor((Math.floor(atk * eff) + Math.floor(Math.floor(atk * eff) * adv) + Math.floor(spcStat * spcMod) - (mit + Math.floor(mit * mitMod))) * (1 + offMult)) + offFlat) * (1 - defMult) - defFlat);
 }
 
-// TODO: ally/owl buffs, marriage buffs
-function getAtk(a) {
-    if (a.isBlade) {
-        return a.atk + (a.hones * 2) + a.spurs - a.debuffs
+function getAtk(unit) {
+    if (unit.isBlade) {
+        let totalHones = Object.values(unit.hones).reduce((a, b) => a + b, 0);
+        totalHones += unit.hones.atk;
+
+        return unit.atk + totalHones + unit.spurs.atk - unit.debuffs.atk;
     }
-    return atk + spurs + hones - debuffs;
+
+    return unit.atk + unit.spurs.atk + unit.hones.atk - unit.debuffs.atk;
 }
 
 function getEff(hasBonus) {
@@ -42,8 +118,8 @@ function getEff(hasBonus) {
 
 // TODO: cancel affinity 1-3
 function getAdv(a, d) {
-    const aColor = getColor(a.weapon);
-    const dColor = getColor(d.weapon);
+    const aColor = a.weapon.color;
+    const dColor = d.weapon.color;
     let advMult = 0; // max possible is 0.4
     let attackerAdv, defenderAdv;
 
@@ -63,23 +139,23 @@ function getAdv(a, d) {
         defenderAdv = true;
     }
 
-    if (attackerAdv && (a.isGem || d.isGem)) {
-        advMult += 0.2;
-    } else if ((defenderAdv && a.isGem) || (defenderAdv && d.isGem)) {
-        advMult -= 0.2;
-    } else if (attackerAdv && (a.TA === 1 || d.TA === 1)) {
-        advMult += 0.1;
-    } else if (defenderAdv && (a.TA === 1 || d.TA === 1)) {
-        advMult -= 0.1;
-    } else if (attackerAdv && (a.TA === 2 || d.TA === 2)) {
-        advMult += 0.15;
-    } else if (defenderAdv && (a.TA === 2 || d.TA === 2)) {
-        advMult -= 0.15;
-    } else if (attackerAdv && (a.TA === 3 || d.TA === 3)) {
-        advMult += 0.2;
-    } else if (defenderAdv && (a.TA === 3 || d.TA === 3)) {
-        advMult -= 0.2;
-    }
+    // if (attackerAdv && (a.isGem || d.isGem)) {
+    //     advMult += 0.2;
+    // } else if ((defenderAdv && a.isGem) || (defenderAdv && d.isGem)) {
+    //     advMult -= 0.2;
+    // } else if (attackerAdv && (a.TA === 1 || d.TA === 1)) {
+    //     advMult += 0.1;
+    // } else if (defenderAdv && (a.TA === 1 || d.TA === 1)) {
+    //     advMult -= 0.1;
+    // } else if (attackerAdv && (a.TA === 2 || d.TA === 2)) {
+    //     advMult += 0.15;
+    // } else if (defenderAdv && (a.TA === 2 || d.TA === 2)) {
+    //     advMult -= 0.15;
+    // } else if (attackerAdv && (a.TA === 3 || d.TA === 3)) {
+    //     advMult += 0.2;
+    // } else if (defenderAdv && (a.TA === 3 || d.TA === 3)) {
+    //     advMult -= 0.2;
+    // }
 
     // ca1: ignore ta or gem effects
     // ca2: if disadvantage, ignore ta or gem effects, include them if advantage
@@ -93,7 +169,7 @@ function getAdv(a, d) {
 }
 
 function getSpcStat(a) {
-    switch (a.special) {
+    switch (a.special.value) {
         case 'glowing ember':
         case 'bonfire':
         case 'ignis':
@@ -117,8 +193,9 @@ function getSpcStat(a) {
     }
 }
 
-function getSpcMod() {
-    switch (a.special) {
+function getSpcMod(special, cooldown) {
+    if (cooldown === 0) {
+        switch (special) {
         case 'glowing ember':
         case 'bonfire':
         case 'chilling wind':
@@ -139,15 +216,18 @@ function getSpcMod() {
         default:
             return 0;
     }
+    } else {
+        return 0;
+    }
 }
 
-function getMit(atkWeapon, d, defSpur, defFort, defDebuff, resSpur, resFort, resDebuff) {
-    const dmgType = getDmgType(atkWeapon, d.def, d.res);
+function getMit(dmgType, d) {
+    // TODO: adaptive damage
 
     if (dmgType === 'res') {
-        return d.res + resSpur + resFort - resDebuff;
+        return d.res + d.spurs.res + d.hones.res - d.debuffs.res;
     } else {
-        return d.def + defSpur + defFort - resDebuff;
+        return d.def + d.spurs.def + d.hones.def - d.debuffs.def;
     }
 }
 
@@ -178,8 +258,8 @@ function getMitMod(special, defTerrain) {
     return mod;
 }
 
-function getOffMult(a) {
-    switch (a.special) {
+function getOffMult(special) {
+    switch (special) {
         case 'nightsky':
         case 'glimmer':
             return 0.5;
@@ -201,8 +281,9 @@ function getOffFlat(a) {
 }
 
 function getDefMult(a, d) {
-    if (a.weapon === ('tome' || 'dagger' || 'bow' || 'staff')) {
-        switch (d.special) {
+    if (d.cooldown === 0) {
+        if (a.weapon.ranged) {
+            switch (d.special.value) {
             case 'holyvestments':
             case 'sacredcowl':
             case 'icemirror':
@@ -211,9 +292,9 @@ function getDefMult(a, d) {
                 return 0.5;
             default:
                 return 0;
-        }
-    } else {
-        switch (d.special) {
+            }   
+        } else {
+            switch (d.special.value) {
             case 'buckler':
             case 'escutcheon':
                 return 0.3;
@@ -221,27 +302,23 @@ function getDefMult(a, d) {
                 return 0.5;
             default:
                 return 0;
+            }
         }
+    } else {
+        return 0;
     }
 }
 
 function getDefFlat(d) {
-    d.isShieldPulse ? 5 : 0;
-}
-
-function getDmg(atk, eff, adv, spcStat, spcMod, mit, midMod, offMult, offFlat, defMult, defFlat) {
-    return Math.ceil((Math.floor((Math.floor(atk * eff) + Math.floor(Math.floor(atk * eff) * adv) + Math.floor(spcStat * spcMod) - (mit + Math.floor(mit * mitMod))) * (1 + offMult)) + offFlat) * (1 - defMult) - defFlat);
-}
-
-function getStaffDmg() {
-    return 0.5;
+    return d.isShieldPulse && d.special.defensive ? 5 : 0;
 }
 
 // TODO: any todos listed above
 // aoe specials
 // healing specials
 // consider special charge
-// defensive tiles
+// handle ice mirror correctly on retaliation
+// make attack function
 
 // weapon types
 // wo
@@ -260,6 +337,7 @@ function getStaffDmg() {
     // breath
     // counter/abilitiy to retaliate
     // flashing/heavy blade
+    // fury
 // b:
     // breaker
     // neutralize bonus

@@ -18,10 +18,22 @@ class Unit extends Component {
             <section className="unit-container">
                 <h2>{this.props.unitType}</h2>
                 <div className="stats">
-                    <BaseStats unitStats={this.props.unitStats} unitType={this.props.unitType} updateUnitValues={this.props.updateUnitValues} />
-                    <StatModifier type="Buffs" />
-                    <StatModifier type="Field Buffs" />
-                    <StatModifier type="Debuffs" />
+                    <BaseStats 
+                        unitStats={this.props.unitStats} 
+                        unitType={this.props.unitType} 
+                        updateUnitValues={this.props.updateUnitValues} />
+                    <StatModifier 
+                        updateUnitModifiers={this.props.updateUnitModifiers}
+                        unitType={this.props.unitType} 
+                        type="Buffs" />
+                    <StatModifier 
+                        updateUnitModifiers={this.props.updateUnitModifiers}
+                        unitType={this.props.unitType} 
+                        type="Field Buffs" />
+                    <StatModifier 
+                        updateUnitModifiers={this.props.updateUnitModifiers}
+                        unitType={this.props.unitType} 
+                        type="Debuffs" />
                 </div>
                 <div className="ws-container">
                     <Weapon 

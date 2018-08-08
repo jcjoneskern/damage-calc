@@ -34,6 +34,11 @@ export const aSkill = [
         value: 'dc',
         description: ''
     },
+    {
+        label: 'Fury',
+        value: 'fury',
+        description: ''
+    }
 ]
 
 export const bSkill = [

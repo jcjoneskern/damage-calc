@@ -15,11 +15,10 @@ class BaseStats extends Component {
                     <div className="hp-container">
                         <input 
                             min="0" 
-                            max="99" 
+                            max={this.props.unitStats.totalHp}
                             onChange={(e) => this.props.updateUnitValues(e, this.props.unitType)} 
                             type="number" 
                             name="hp" 
-                            value={this.props.unitStats.hp}
                             placeholder="Current HP" />
                         <input 
                             min="0"
@@ -27,7 +26,6 @@ class BaseStats extends Component {
                             onChange={(e) => this.props.updateUnitValues(e, this.props.unitType)} 
                             type="number" 
                             name="totalHp" 
-                            value={this.props.unitStats.totalHp}
                             placeholder="Base HP" />
                     </div>
                     <input 
@@ -36,7 +34,6 @@ class BaseStats extends Component {
                         onChange={(e) => this.props.updateUnitValues(e, this.props.unitType)} 
                         type="number" 
                         name="atk" 
-                        value={this.props.unitStats.atk}
                         placeholder="Attack" />
                     <input 
                         min="0" 
@@ -44,7 +41,6 @@ class BaseStats extends Component {
                         onChange={(e) => this.props.updateUnitValues(e, this.props.unitType)} 
                         type="number" 
                         name="spd" 
-                        value={this.props.unitStats.spd}
                         placeholder="Speed" />
                     <input 
                         min="0" 
@@ -52,7 +48,6 @@ class BaseStats extends Component {
                         onChange={(e) => this.props.updateUnitValues(e, this.props.unitType)} 
                         type="number" 
                         name="def" 
-                        value={this.props.unitStats.def}
                         placeholder="Defense" />
                     <input 
                         min="0" 
@@ -60,7 +55,6 @@ class BaseStats extends Component {
                         onChange={(e) => this.props.updateUnitValues(e, this.props.unitType)} 
                         type="number" 
                         name="res" 
-                        value={this.props.unitStats.res}
                         placeholder="Resistance" />
                 </div>
             </section>
