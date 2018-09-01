@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import '../css/unit.css';
 
-import { updateUnitWeapon, updateUnitSpecial } from '../actions/unitactions';
-
 import BaseStats from './base';
 import StatModifier from './modifier';
 import Weapon from './weapon';
