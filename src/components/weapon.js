@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { updateUnitWeapon } from '../actions/unitactions';
 
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css'
@@ -43,7 +46,10 @@ class Weapon extends Component {
             </section>
         );
     }
-
 }
 
-export default Weapon;
+const mapDispatchToProps = {
+    updateUnitWeapon
+}
+
+export default connect(null, mapDispatchToProps)(Weapon);

@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { updateUnitModifiers } from '../actions/unitactions';
 
 class StatModifier extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            atk: 0,
-            spd: 0,
-            def: 0,
-            res: 0
-        }
+        this.state = {}
     }
-
 
     render() {
         return (
@@ -46,7 +43,10 @@ class StatModifier extends Component {
             </section>
         );
     }
-
 }
 
-export default StatModifier;
+const mapDispatchToProps = {
+    updateUnitModifiers
+}
+
+export default connect(null, mapDispatchToProps)(StatModifier);

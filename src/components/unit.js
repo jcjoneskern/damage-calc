@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../css/unit.css';
 
+import { updateUnitWeapon, updateUnitSpecial } from '../actions/unitactions';
+
 import BaseStats from './base';
 import StatModifier from './modifier';
 import Weapon from './weapon';
@@ -20,34 +22,27 @@ class Unit extends Component {
                 <div className="stats">
                     <BaseStats 
                         unitStats={this.props.unitStats} 
-                        unitType={this.props.unitType} 
-                        updateUnitValues={this.props.updateUnitValues} />
+                        unitType={this.props.unitType} />
                     <StatModifier 
-                        updateUnitModifiers={this.props.updateUnitModifiers}
                         unitType={this.props.unitType} 
                         type="Buffs" />
                     <StatModifier 
-                        updateUnitModifiers={this.props.updateUnitModifiers}
                         unitType={this.props.unitType} 
                         type="Field Buffs" />
                     <StatModifier 
-                        updateUnitModifiers={this.props.updateUnitModifiers}
                         unitType={this.props.unitType} 
                         type="Debuffs" />
                 </div>
                 <div className="ws-container">
                     <Weapon 
-                        updateUnitWeapon={this.props.updateUnitWeapon}
                         unitType={this.props.unitType} />
                     <Special 
-                        updateUnitSpecial={this.props.updateUnitSpecial}
                         unitType={this.props.unitType} />
                 </div>
             </section>
 
         );
     }
-
 }
 
 export default Unit;

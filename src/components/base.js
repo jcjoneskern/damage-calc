@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { updateUnitValues } from '../actions/unitactions';
 
 class BaseStats extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {}
+        this.state = {
+            
+        }
     }
 
     render() {
@@ -19,14 +24,16 @@ class BaseStats extends Component {
                             onChange={(e) => this.props.updateUnitValues(e, this.props.unitType)} 
                             type="number" 
                             name="hp" 
-                            placeholder="Current HP" />
+                            placeholder="Current HP"
+                            value={this.props.unitStats.hp} />
                         <input 
                             min="0"
                             max="99"
                             onChange={(e) => this.props.updateUnitValues(e, this.props.unitType)} 
                             type="number" 
                             name="totalHp" 
-                            placeholder="Base HP" />
+                            placeholder="Base HP"
+                            value={this.props.unitStats.totalHp} />
                     </div>
                     <input 
                         min="0" 
@@ -63,4 +70,8 @@ class BaseStats extends Component {
 
 }
 
-export default BaseStats;
+const mapDispatchToProps = {
+    updateUnitValues
+}
+
+export default connect(null, mapDispatchToProps)(BaseStats);

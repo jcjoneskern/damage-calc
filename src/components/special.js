@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { updateUnitSpecial } from '../actions/unitactions';
 
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css'
@@ -55,7 +58,10 @@ class Special extends Component {
             </section>
         );
     }
-
 }
 
-export default Special;
+const mapDispatchToProps = {
+    updateUnitSpecial
+}
+
+export default connect(null, mapDispatchToProps)(Special);
